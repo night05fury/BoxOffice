@@ -1,28 +1,33 @@
 import React, { useEffect } from 'react';
+import { useState } from 'react';
 import "./App.css"
 import SearchIcon from './search.svg';
+import MovieCard  from './MovieCard';
+
 
 
 //58a66706    API Key for OMBD 
 
 const API_URL='http://www.omdbapi.com?apikey=58a66706';
-const movie1={
-    "Title":"Avengers",
-    "Year":"2015",
-    "imdbID":"tt2586634",
-    "Type":"movie",
-    "Poster":"N/A"
-}
+// const movie={
+//     "Title":"Avengers",
+//     "Year":"2015",
+//     "imdbID":"tt2586634",
+//     "Type":"movie",
+//     "Poster":"N/A"
+// }
 
 
 
 
 const App=()=>{
-
+    const [movies, setMovies] = useState([]);
+    const [searchTerm, setSearchTerm]=useState("");
     const searchMovies = async(title)=>{
         const response = await fetch(`${API_URL}&s=${title}`);
-        const data=await response.json();
+        const data = await response.json();
 
+        setMovies(data.Search);
         console.log(data.Search);
         
 
@@ -41,29 +46,33 @@ const App=()=>{
             <div className="search">
                 <input
                     placeholder="Search for movies"
-                    value="Avengers"
-                    onChange={()=>{}}
+                    value={searchTerm}
+                    onChange={(e)=>setSearchTerm(e.target.value)}
                 />
                 <img src={SearchIcon}
                 alt="Search"
-                onClick={()=>{}}
+                onClick={()=>searchMovies(searchTerm)}
                 />
             </div>
-
-            <div className='container'>
-                <div className="movie">
-                    <p>
-                        {movie1.Year}
-                    </p>
-                <div className=''>
-                    <img src={movie1.Poster!=='N/A'? movie1.Poster :'https://via.placeholder.com/400'} alt={movie1.Title}/>
+            {
+                movies?.length>0?(
+                    <div className='container'>
+                    {/* <MovieCard movie1={movie1}/>  this is static card  */}
+                    
+                    {/* this is now a dynamic map for accessing the movie */
+                        movies.map((movie)=>(
+                            <MovieCard movie={movie} />
+                        ))
+                    }
                 </div>
-                <div >
-                    <span>{movie1.Type}</span>
-                    <h3>{movie1.Title}</h3>
-                </div>
-                </div>
-            </div>
+                ):(
+                    <div className='empty'>
+                        <h2>No Movies Found</h2>
+                    </div>
+                )
+            }
+           
+           
     </div>
     );
 }
