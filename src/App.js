@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import "./App.css"
 import SearchIcon from './search.svg';
@@ -32,9 +32,9 @@ const App=()=>{
         
 
     }
-    useEffect(()=>{
-        searchMovies('Avengers');
-    },[]);
+    // useEffect(()=>{
+    //     searchMovies('Avengers');
+    // },[]);
 
 
 
